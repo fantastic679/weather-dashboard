@@ -1,3 +1,5 @@
+document.title = "Weather Dashboard"
+
 var APIKey = "b9436ed502002ed5624267bc7336b393";
 var city; //// need to be modified to take user input ////
 city = "sydney"; //// to delete later - for testing only ////
@@ -52,9 +54,20 @@ fetch(queryURL_weather)
             console.log(data.daily[i].uvi); // UV index
         }
 
+
+        // pass data to external function to create cards
+
     });
 });
 
 
+// external function to take data and create HTML elements for current weather card
+
+// external function to take data and create HTML elements for forcast cards
 
 
+// function to capture the search event
+// --> needs to include saving the search term into local storage
+// --> ?creating buttons that allow previous search terms to be re-searched
+
+// clear history button action
