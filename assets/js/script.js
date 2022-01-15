@@ -22,8 +22,8 @@ fetch(queryURL_weather)
     .then(data => {
         storeData2 = data; //// to delete later - for testing only ////
 
-        console.log("THIS IS TODAY");
-        var dateObj = new Date(data.current.dt*1000)
+        console.log("This is right now");
+        var dateObj = new Date((data.current.dt+data.timezone_offset)*1000)
         var day = ("0" + dateObj.getUTCDate()).slice(-2);
         var month = ("0" + (dateObj.getUTCMonth() + 1)).slice(-2);
         var year = dateObj.getUTCFullYear();
@@ -37,8 +37,8 @@ fetch(queryURL_weather)
         console.log(data.current.uvi); // UV index
 
         for (let i = 0; i < 5; i++) {
-            console.log("THIS IS " + i + " DAYS BACK");
-            var dateObj = new Date(data.daily[i].dt*1000)
+            console.log("This is the forecast for " + i + " day(s) ahead");
+            var dateObj = new Date((data.daily[i].dt)*1000)
             var day = ("0" + dateObj.getUTCDate()).slice(-2);
             var month = ("0" + (dateObj.getUTCMonth() + 1)).slice(-2);
             var year = dateObj.getUTCFullYear();
