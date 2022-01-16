@@ -53,7 +53,7 @@ fetch(queryURL_weather)
         var cardHTML = [];
         for (let i = 0; i < returnArray.length; i++) {
             if (i === 0) {
-                cardHTML[i] =   '<div class="card text-white bg-primary mb-3">' +
+                cardHTML[i] =   '<div class="card col-12 col-sm-6 col-md-4 col-lg-2 text-white bg-primary mb-3">' +
                                     '<div class="card-body">' +
                                         '<h5 class="card-title">Today</h5>' +
                                         '<img src="' + returnArray[i][2] + '">' +
@@ -66,7 +66,7 @@ fetch(queryURL_weather)
                                 '</div>';
             }
             else {
-                cardHTML[i] =   '<div class="card bg-light mb-3">' +
+                cardHTML[i] =   '<div class="card col-12 col-sm-6 col-md-4 col-lg-2 bg-light mb-3">' +
                                     '<div class="card-body">' +
                                         '<h5 class="card-title">' + returnArray[i][0] + '</h5>' +
                                         '<img src="' + returnArray[i][2] + '">' +
@@ -89,3 +89,5 @@ fetch(queryURL_weather)
     })
     ;
 });
+
+// card-body col-12 col-sm-6 col-md-4 col-lg-2
