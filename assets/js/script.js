@@ -23,8 +23,8 @@ fetch(queryURL_weather)
     .then(response => response.json())
     .then(data => {
         storeData2 = data; //// to delete later - for testing only ////
+        var returnArray = [];
 
-        console.log("This is right now");
         var dateObj = new Date((data.current.dt+data.timezone_offset)*1000)
         var day = ("0" + dateObj.getUTCDate()).slice(-2);
         var month = ("0" + (dateObj.getUTCMonth() + 1)).slice(-2);
@@ -38,25 +38,44 @@ fetch(queryURL_weather)
         console.log(data.current.wind_speed); // wind speed
         console.log(data.current.uvi); // UV index
 
+        returnArray.push([dateString,
+            data.current.weather[0].main + ": " + data.current.weather[0].description,
+            "http://openweathermap.org/img/wn/" + data.current.weather[0].icon + "@2x.png",
+            "Temp: " + data.current.temp,
+            "Humidity: " + data.current.humidity,
+            "Wind speed: " + data.current.wind_speed,
+            "UV index: " + data.current.uvi]);
+
+
         for (let i = 0; i < 5; i++) {
-            console.log("This is the forecast for " + i + " day(s) ahead");
             var dateObj = new Date((data.daily[i].dt)*1000)
             var day = ("0" + dateObj.getUTCDate()).slice(-2);
             var month = ("0" + (dateObj.getUTCMonth() + 1)).slice(-2);
             var year = dateObj.getUTCFullYear();
             var dateString = day + "/" + month + "/" + year;
-            console.log(dateString); // date
-            console.log(data.daily[i].weather[0].main + ": " + data.daily[i].weather[0].description + "; " + "http://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon + "@2x.png"
-            ); // weather conditions
-            console.log(data.daily[i].temp.day) // temperature
-            console.log(data.daily[i].humidity); // humidity
-            console.log(data.daily[i].wind_speed); // wind speed
-            console.log(data.daily[i].uvi); // UV index
+            returnArray.push([dateString,
+                              data.daily[i].weather[0].main + ": " + data.daily[i].weather[0].description,
+                              "http://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon + "@2x.png",
+                              "Temp: " + data.daily[i].temp.day,
+                              "Humidity: " + data.daily[i].humidity,
+                              "Wind speed: " + data.daily[i].wind_speed,
+                              "UV index: " + data.daily[i].uvi]);
         }
 
-
+        return returnArray;
         // pass data to external function to create cards
 
+    })
+    .then(returnArray => {
+        for (let i = 0; i < returnArray.length; i++) {
+            console.log(returnArray[i]);
+            if (i === 0) {
+                // make a blue box
+            }
+            else {
+                // make a grey box
+            }
+        }
     });
 });
 
@@ -71,3 +90,18 @@ fetch(queryURL_weather)
 // --> ?creating buttons that allow previous search terms to be re-searched
 
 // clear history button action
+
+// var makeForecastCards = function(...args) {
+//     for 
+// }
+
+// <div class="card bg-light mb-3">
+//     <div class="card-body">
+//         <h5 class="card-title">Card title</h5>
+//         <img src="http://openweathermap.org/img/wn/10d@2x.png">
+        
+//         <p class="card-text">Temp</p>
+//         <p class="card-text">Wind</p>
+//         <p class="card-text">Humidity</p>
+//     </div>
+// </div>
