@@ -1,34 +1,44 @@
-var load_DOM = function () {
+var post_search_actions = function () {
 
     // loop through all stored searches
     // modify the dropdown menu accordingly
     // then reset the DOM
     
     $(".dropdown-item:first").on("click", function(event) {
-        $(".dropdown-item:first").off("click"); 
-        // to prevent multiple instances of click event
-        // alternative is to use event.stopImmediatePropagation()
+        event.stopImmediatePropagation();
+        $(".dropdown-toggle").dropdown("toggle");
         search();
-        
     });    
 
-    $(".dropdown-item:last").on("click", function() {
-        $(".dropdown-item:last").off("click");
-        console.log("clear history");
+    $(".dropdown-item:last").on("click", function(event) {
+        event.stopImmediatePropagation();
+        $(".dropdown-toggle").dropdown("toggle");
+        localStorage.clear();
+        $("input").val("your secrets are safe...");
+        $("input").select();
+        var bootstrap_container = $(".row:last");
+        bootstrap_container.html("");
+        post_search_actions();
+    });
+
+    $("input").keydown(function(event) {
+        event.stopImmediatePropagation();
+        if (event.keyCode === 13) {
+            $(".dropdown-item:first").click();
+        }
     });
 
     $("input").focus();
 }
 
-load_DOM();
+post_search_actions();
 
 
 var search = function() {
-    console.log("one more search");
     var APIKey = "b9436ed502002ed5624267bc7336b393";
-    var city = $("input").val();
-    var queryURL_weather = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey
-    
+    const input = $("input").val();
+    var queryURL_weather = "http://api.openweathermap.org/data/2.5/weather?q=" + input + "&appid=" + APIKey
+    $("input").val("summoning magic...");
     fetch(queryURL_weather)
     .then(response => response.json())
     .then(data => {
@@ -76,7 +86,7 @@ var search = function() {
             var cardHTML = [];
             for (let i = 0; i < returnArray.length; i++) {
                 if (i === 0) {
-                    cardHTML[i] =   '<div class="card col-12 col-sm-6 col-md-4 col-lg-4 col-xl-2 text-white bg-primary mb-3">' +
+                    cardHTML[i] =   '<div class="card col-12 col-sm-6 col-md-4 col-lg-4 col-xl-2 text-white bg-primary">' +
                                         '<div class="card-body">' +
                                             '<h5 class="card-title">' + returnArray[i][7] + '</h5>' +
                                             '<img src="' + returnArray[i][2] + '">' +
@@ -89,7 +99,7 @@ var search = function() {
                                     '</div>';
                 }
                 else {
-                    cardHTML[i] =   '<div class="card col-12 col-sm-6 col-md-4 col-lg-4 col-xl-2 bg-light mb-3">' +
+                    cardHTML[i] =   '<div class="card col-12 col-sm-6 col-md-4 col-lg-4 col-xl-2 bg-light">' +
                                         '<div class="card-body">' +
                                             '<h5 class="card-title">' + returnArray[i][0] + '</h5>' +
                                             '<img src="' + returnArray[i][2] + '">' +
@@ -110,10 +120,17 @@ var search = function() {
                 new_HTML += cardHTML[i];
             }
             var bootstrap_container = $(".row:last");
-            bootstrap_container.html(new_HTML + bootstrap_container.html());
+            bootstrap_container.html(new_HTML + '<div class="form-group col-12"></div>' + bootstrap_container.html());
+            
+            $("input").val("");
 
-            load_DOM();
+            post_search_actions();
     
         });
+    })
+    .catch((error) => {
+        $("input").val("we couldn't help :(");
+        $("input").select();
+        post_search_actions();
     });
 }
