@@ -57,13 +57,14 @@ var search = function() {
             var dateString = day + "/" + month + "/" + year;
     
             returnArray.push([dateString,
-                data.current.weather[0].main + ": " + data.current.weather[0].description,
-                "http://openweathermap.org/img/wn/" + data.current.weather[0].icon + "@2x.png",
-                "Temperature: " + data.current.temp + "&degC",
-                "Humidity: " + data.current.humidity + "%",
-                "Wind speed: " + data.current.wind_speed + "m/s",
-                "UV index: " + data.current.uvi,
-                coords[2]]);
+                              data.current.weather[0].main,
+                              data.current.weather[0].description,
+                              "http://openweathermap.org/img/wn/" + data.current.weather[0].icon + "@2x.png",
+                              data.current.temp,
+                              data.current.humidity,
+                              data.current.wind_speed,
+                              data.current.uvi,
+                              coords[2]]);
     
     
             for (let i = 0; i < 5; i++) {
@@ -73,12 +74,13 @@ var search = function() {
                 var year = dateObj.getUTCFullYear();
                 var dateString = day + "/" + month + "/" + year;
                 returnArray.push([dateString,
-                                  data.daily[i].weather[0].main + ": " + data.daily[i].weather[0].description,
+                                  data.daily[i].weather[0].main,
+                                  data.daily[i].weather[0].description,
                                   "http://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon + "@2x.png",
-                                  "Temperature: " + data.daily[i].temp.day + "&degC", 
-                                  "Humidity: " + data.daily[i].humidity + "%",
-                                  "Wind speed: " + data.daily[i].wind_speed + "m/s",
-                                  "UV index: " + data.daily[i].uvi]);
+                                  data.daily[i].temp.day,
+                                  data.daily[i].humidity,
+                                  data.daily[i].wind_speed,
+                                  data.daily[i].uvi]);
             }
             return returnArray;
         })
@@ -88,13 +90,13 @@ var search = function() {
                 if (i === 0) {
                     cardHTML[i] =   '<div class="card col-12 col-sm-6 col-md-4 col-lg-4 col-xl-2 text-white bg-primary">' +
                                         '<div class="card-body">' +
-                                            '<h5 class="card-title">' + returnArray[i][7] + '</h5>' +
-                                            '<img src="' + returnArray[i][2] + '">' +
-                                            '<p class="card-text">' + returnArray[i][1] + '</p>' +
-                                            '<p class="card-text">' + returnArray[i][3] + '</p>' +
-                                            '<p class="card-text">' + returnArray[i][4] + '</p>' +
-                                            '<p class="card-text">' + returnArray[i][5] + '</p>' +
-                                            '<p class="card-text">' + returnArray[i][6] + '</p>' +
+                                            '<h5 class="card-title">' + returnArray[i][8] + '</h5>' +
+                                            '<img src="' + returnArray[i][3] + '">' +
+                                            '<p class="card-text"><strong>' + returnArray[i][1] + ':</strong> ' + returnArray[i][2] + '</p>' +
+                                            '<p class="card-text"><strong>Temperature:</strong> ' + returnArray[i][4] + '&degC</p>' +
+                                            '<p class="card-text"><strong>Humidity:</strong> ' + returnArray[i][5] + '%</p>' +
+                                            '<p class="card-text"><strong>Wind speed:</strong> ' + returnArray[i][6] + 'm/s</p>' +
+                                            '<p class="card-text"><strong>UV index:</strong> ' + rate_UV(returnArray[i][7]) + '</p>' +
                                         '</div>' + 
                                     '</div>';
                 }
@@ -102,12 +104,12 @@ var search = function() {
                     cardHTML[i] =   '<div class="card col-12 col-sm-6 col-md-4 col-lg-4 col-xl-2 bg-light">' +
                                         '<div class="card-body">' +
                                             '<h5 class="card-title">' + returnArray[i][0] + '</h5>' +
-                                            '<img src="' + returnArray[i][2] + '">' +
-                                            '<p class="card-text">' + returnArray[i][1] + '</p>' +
-                                            '<p class="card-text">' + returnArray[i][3] + '</p>' +
-                                            '<p class="card-text">' + returnArray[i][4] + '</p>' +
-                                            '<p class="card-text">' + returnArray[i][5] + '</p>' +
-                                            '<p class="card-text">' + returnArray[i][6] + '</p>' +
+                                            '<img src="' + returnArray[i][3] + '">' +
+                                            '<p class="card-text"><strong>' + returnArray[i][1] + ':</strong> ' + returnArray[i][2] + '</p>' +
+                                            '<p class="card-text"><strong>Temperature:</strong> ' + returnArray[i][4] + '&degC</p>' +
+                                            '<p class="card-text"><strong>Humidity:</strong> ' + returnArray[i][5] + '%</p>' +
+                                            '<p class="card-text"><strong>Wind speed:</strong> ' + returnArray[i][6] + 'm/s</p>' +
+                                            '<p class="card-text"><strong>UV index:</strong> ' + rate_UV(returnArray[i][7]) + '</p>' +
                                         '</div>' + 
                                     '</div>';
                 }
@@ -133,4 +135,15 @@ var search = function() {
         $("input").select();
         post_search_actions();
     });
+}
+
+
+var rate_UV = function(UV_index) {
+    if (UV_index < 3) {
+        return(UV_index + ' <span class="badge bg-success">favourable</span>');
+    } else if (UV_index < 6) {
+        return(UV_index + ' <span class="badge bg-warning">moderate</span>');
+    } else {
+        return(UV_index + ' <span class="badge bg-danger">severe</span>');
+    }  
 }
