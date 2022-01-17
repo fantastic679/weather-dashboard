@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Wea-da! is a simple web-based weather dashboard that allows uses to quickly search a city name to find out the current weather conditions and forecasted weather conditions for the upcoming 5 days (current day included).
+Wea-da! is a simple web-based weather dashboard that allows users to quickly search a city name to find out the current weather conditions and forecasted weather conditions for the upcoming 5 days (current day included).
 
 The data is accessed from [OpenWeatherMap](https://openweathermap.org/) using free-to-use APIs.
 
@@ -44,7 +44,7 @@ THEN I am again presented with current and future conditions for that city
 
 ## Other features
 
-The user is initially presented with a search bar, which is automatically in focus. The user can enter the city name and hit `↵ Enter` or use to dropdown menu on the right to search. Where sensible, the search bar remain in focus to facilitate further searches. Searches are stored in local memory and are automatically restored on application startup.
+The user is initially presented with a search bar, which is automatically in focus. The user can enter the city name and hit `↵ Enter` or use to dropdown menu on the right to search. Where sensible, the search bar remains in focus to facilitate further searches. Searches are stored in local memory and are automatically restored on application startup.
 
 Once available, the weather information is displayed in card format, with the current weather information displayed on a blue card, and forecasted weather information displayed on grey cards. An intentional design choice was made to leave old search results on screen when new searches are made (with new search results on top). Bootstrap was used to ensure responsive web design to allow users on smaller screen be able to read the cards.
 

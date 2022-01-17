@@ -12,7 +12,6 @@ var reset_DOM = function() {
         }
         new_HTML = '<div role="separator" class="dropdown-divider"></div>' + new_HTML;
         search_history.html(new_HTML);
-        console.log(new_HTML);
 
         // sets up click events for each of these new menu items
         // needs to be a separate for loop as event listeners are reset when DOM is changed
@@ -86,7 +85,7 @@ var post_search_actions = function () {
 var search = function() {
     var APIKey = "b9436ed502002ed5624267bc7336b393";
     const input = $("input").val();
-    var queryURL_weather = "http://api.openweathermap.org/data/2.5/weather?q=" + input + "&appid=" + APIKey
+    var queryURL_weather = "https://api.openweathermap.org/data/2.5/weather?q=" + input + "&appid=" + APIKey
     $("input").val("summoning magic...");
     fetch(queryURL_weather)
     .then(response => response.json())
