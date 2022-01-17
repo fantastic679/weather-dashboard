@@ -1,13 +1,6 @@
-// retrieve previous search strings from local storage
-if (localStorage.getItem("storage") !== null) {
-    var storage = JSON.parse(localStorage.getItem("storage"));
-} else {
-    var storage = [];
-}
 
-// this function is used to update the UI after a search to reflect search history
-var post_search_actions = function () {
 
+var reset_DOM = function() {
     var search_history = $("#search-history");
     search_history.html("");
     new_HTML="";
@@ -33,6 +26,25 @@ var post_search_actions = function () {
             });
         }
     }
+}
+
+// function to generate HTML code for colour-coded badges based on UV index
+var rate_UV = function(UV_index) {
+    if (UV_index < 3) {
+        return(UV_index + ' <span class="badge bg-success">favourable</span>');
+    } else if (UV_index < 6) {
+        return(UV_index + ' <span class="badge bg-warning">moderate</span>');
+    } else {
+        return(UV_index + ' <span class="badge bg-danger">severe</span>');
+    }  
+}
+
+// this function updates the UI to reflect changes in stored searches
+// we use it on startup as well as whenever there are any new searches or when local storage is cleared
+// it has listener events for user input
+var post_search_actions = function () {
+
+    reset_DOM();
     
     // click event to search
     $(".dropdown-item:first").on("click", function(event) {
@@ -47,7 +59,9 @@ var post_search_actions = function () {
     $(".dropdown-item:last").on("click", function(event) {
         event.stopImmediatePropagation();
         $(".dropdown-toggle").dropdown("toggle");
+        storage = [];
         localStorage.removeItem("storage");
+        reset_DOM();
         $("input").val("your secrets are safe...");
         $("input").select();
         var bootstrap_container = $(".row:last");
@@ -66,9 +80,6 @@ var post_search_actions = function () {
     // keep text input field in focus to facilitate another search
     $("input").focus();
 }
-
-// update the UI on startup to reflect searches restored from local storage
-post_search_actions();
 
 // this is the meat of the sandwich
 // this uses 2x APIs from OpenWeatherMap to retrieve and present data about the searched city
@@ -175,14 +186,14 @@ var search = function() {
     });
 }
 
+///////////////////////////////////////////////////////
 
-// function to generate HTML code for colour-coded badges based on UV index
-var rate_UV = function(UV_index) {
-    if (UV_index < 3) {
-        return(UV_index + ' <span class="badge bg-success">favourable</span>');
-    } else if (UV_index < 6) {
-        return(UV_index + ' <span class="badge bg-warning">moderate</span>');
-    } else {
-        return(UV_index + ' <span class="badge bg-danger">severe</span>');
-    }  
+// retrieve previous search strings from local storage
+if (localStorage.getItem("storage") !== null) {
+    var storage = JSON.parse(localStorage.getItem("storage"));
+} else {
+    var storage = [];
 }
+
+// initialise everything and await user input
+post_search_actions();
