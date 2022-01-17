@@ -1,19 +1,53 @@
+// retrieve previous search strings from local storage
+if (localStorage.getItem("storage") !== null) {
+    var storage = JSON.parse(localStorage.getItem("storage"));
+} else {
+    var storage = [];
+}
+
+// this function is used to update the UI after a search to reflect search history
 var post_search_actions = function () {
 
-    // loop through all stored searches
-    // modify the dropdown menu accordingly
-    // then reset the DOM
+    var search_history = $("#search-history");
+    search_history.html("");
+    new_HTML="";
+    if (storage.length > 0) {
+
+        // create dropdown menu items for previous searches
+        for (let i = 0; i < storage.length; i++) {
+            new_HTML += '<a class="dropdown-item" href="#">Search "' + storage[i] + '" again</a>';
+        }
+        new_HTML = '<div role="separator" class="dropdown-divider"></div>' + new_HTML;
+        search_history.html(new_HTML);
+        console.log(new_HTML);
+
+        // sets up click events for each of these new menu items
+        // needs to be a separate for loop as event listeners are reset when DOM is changed
+        for (let i = 0; i < storage.length; i++) {
+            query_element_string = ".dropdown-item:eq(" + (i+1) + ")";
+            $(query_element_string).on("click", function(event) {
+                event.stopImmediatePropagation();
+                $(".dropdown-toggle").dropdown("toggle");
+                $("input").val(storage[i]);
+                search();
+            });
+        }
+    }
     
+    // click event to search
     $(".dropdown-item:first").on("click", function(event) {
         event.stopImmediatePropagation();
         $(".dropdown-toggle").dropdown("toggle");
+        storage.push($("input").val());
+        localStorage.setItem("storage", JSON.stringify(storage));
         search();
     });    
 
+    // click even to clear history
     $(".dropdown-item:last").on("click", function(event) {
         event.stopImmediatePropagation();
         $(".dropdown-toggle").dropdown("toggle");
-        localStorage.clear();
+        localStorage.removeItem("storage");
         $("input").val("your secrets are safe...");
         $("input").select();
         var bootstrap_container = $(".row:last");
@@ -21,6 +55,7 @@ var post_search_actions = function () {
         post_search_actions();
     });
 
+    // hitting enter in search bar simulates clicking on search button
     $("input").keydown(function(event) {
         event.stopImmediatePropagation();
         if (event.keyCode === 13) {
@@ -28,12 +63,15 @@ var post_search_actions = function () {
         }
     });
 
+    // keep text input field in focus to facilitate another search
     $("input").focus();
 }
 
+// update the UI on startup to reflect searches restored from local storage
 post_search_actions();
 
-
+// this is the meat of the sandwich
+// this uses 2x APIs from OpenWeatherMap to retrieve and present data about the searched city
 var search = function() {
     var APIKey = "b9436ed502002ed5624267bc7336b393";
     const input = $("input").val();
@@ -138,6 +176,7 @@ var search = function() {
 }
 
 
+// function to generate HTML code for colour-coded badges based on UV index
 var rate_UV = function(UV_index) {
     if (UV_index < 3) {
         return(UV_index + ' <span class="badge bg-success">favourable</span>');
